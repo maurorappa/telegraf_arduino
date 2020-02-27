@@ -7,35 +7,32 @@ import (
     "github.com/influxdata/telegraf/plugins/inputs"
 )
 
-type Simple struct {
-    Ok bool `toml:"ok"`
+type Sensor struct {
+    Input []string
 }
 
-func (s *Simple) Description() string {
-    return "a demo plugin"
+func (s *Sensor) Description() string {
+    return "Arduino plugin"
 }
 
-func (s *Simple) SampleConfig() string {
+func (s *Sensor) SampleConfig() string {
     return `
-  ## Indicate if everything is fine
-  ok = true
+  ## an array of sensors
+  sensors = ["T","H"]
 `
 }
 
-func (s *Simple) Init() error {
-	return nil
+func (s *Sensor) Init() error {
+        return nil
 }
 
 func (s *Simple) Gather(acc telegraf.Accumulator) error {
-    if s.Ok {
-        acc.AddFields("state", map[string]interface{}{"value": "pretty good"}, nil)
-    } else {
-        acc.AddFields("state", map[string]interface{}{"value": "not great"}, nil)
+    for _,s := s.Input {
+        acc.AddFields("state", map[string]interface{}{"value": s}, nil)
     }
-
     return nil
 }
 
 func init() {
-    inputs.Add("simple", func() telegraf.Input { return &Simple{} })
+    inputs.Add("simple", func() telegraf.Input { return &Sensor{} })
 }
