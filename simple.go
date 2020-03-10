@@ -27,7 +27,7 @@ func (s *Sensor) Init() error {
 }
 
 func (s *Simple) Gather(acc telegraf.Accumulator) error {
-    for _,s := s.Input {
+    for _,s := s.Input.Sensor() {
         acc.AddFields("state", map[string]interface{}{"value": s}, nil)
     }
     return nil
