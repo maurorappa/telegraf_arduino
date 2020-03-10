@@ -5,6 +5,7 @@ package simple
 import (
     "github.com/influxdata/telegraf"
     "github.com/influxdata/telegraf/plugins/inputs"
+    "math/rand"
 )
 
 type Sensor struct {
@@ -26,13 +27,14 @@ func (s *Sensor) Init() error {
         return nil
 }
 
-func (s *Simple) Gather(acc telegraf.Accumulator) error {
-    for _,s := s.Input.Sensor() {
-        acc.AddFields("state", map[string]interface{}{"value": s}, nil)
+func (s *Sensor) Gather(acc telegraf.Accumulator) error {
+    for _,s := range s.Input {
+        acc.AddFields(s, map[string]interface{}{"value": rand.Intn(100)}, nil)
     }
     return nil
 }
 
 func init() {
+    rand.Seed(80)
     inputs.Add("simple", func() telegraf.Input { return &Sensor{} })
 }
