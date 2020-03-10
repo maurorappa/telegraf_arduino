@@ -8,7 +8,7 @@ import (
 )
 
 type Sensor struct {
-    Input []string
+    Input []string `toml:"sensors"`
 }
 
 func (s *Sensor) Description() string {
