@@ -40,7 +40,7 @@ func (s *Sensor) Gather(acc telegraf.Accumulator) error {
 		if err != nil {
 			log.Printf("cannot write to serial: %s\n", err)
 		}
-		nbytes, failed := serial.Read(buf)
+		nbytes, _ := serial.Read(buf)
 		whole_reply := string(buf)
 		log.Printf("Got %d bytes:, took %f", nbytes, whole_reply)
 		acc.AddFields(s, map[string]interface{}{"value": 1}, nil)
