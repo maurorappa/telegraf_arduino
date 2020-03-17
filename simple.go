@@ -33,7 +33,6 @@ func (s *Sensor) Gather(acc telegraf.Accumulator) error {
 	serial, err := serial.OpenPort(conf)
 	if err != nil {
 		log.Printf("cannot open serial: %s\n", err)
-		return "null"
 	}
 	buf := []byte("________")
 	for _, s := range s.Input {
