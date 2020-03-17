@@ -7,6 +7,7 @@ import (
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"github.com/tarm/serial"
 	"log"
+	"os"
 )
 
 type Sensor struct {
@@ -49,5 +50,6 @@ func (s *Sensor) Gather(acc telegraf.Accumulator) error {
 }
 
 func init() {
+	log.SetOutput(os.Stdout)
 	inputs.Add("simple", func() telegraf.Input { return &Sensor{} })
 }
