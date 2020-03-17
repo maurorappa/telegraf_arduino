@@ -29,18 +29,19 @@ func (s *Sensor) Init() error {
 }
 
 func (s *Sensor) Gather(acc telegraf.Accumulator) error {
-	c := &serial.Config{Name: "/dev/tty.usbmodem14101", Baud: 9600, ReadTimeout: 1000}
-	s, err := serial.OpenPort(c)
+	conf := &serial.Config{Name: "/dev/tty.usbmodem14101", Baud: 9600, ReadTimeout: 1000}
+	serial, err := serial.OpenPort(conf)
 	if err != nil {
 		log.Printf("cannot open serial: %s\n", err)
 		return "null"
 	}
+	buf := []byte("________")
 	for _, s := range s.Input {
-		_, err = s.Write([]byte(sensor))
+		_, err = serial.Write([]byte(s))
 		if err != nil {
 			log.Printf("cannot write to serial: %s\n", err)
 		}
-		nbytes, failed := s.Read(buf)
+		nbytes, failed := serial.Read(buf)
 		whole_reply := string(buf)
 		log.Printf("Got %d bytes:, took %f", nbytes, whole_reply)
 		acc.AddFields(s, map[string]interface{}{"value": 1}, nil)
